@@ -17,12 +17,12 @@ jobs:
         run: |
           curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | BINDIR=/usr/local/bin sh
 
-      - name: Setup ESP32 core
+      - name: Setup ESP32 core 2.0.17
         run: |
           arduino-cli config init --overwrite
           arduino-cli config add board_manager.additional_urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
           arduino-cli core update-index
-          arduino-cli core install esp32:esp32
+          arduino-cli core install esp32:esp32@2.0.17
 
       - name: Install BLE HID libraries
         run: |
@@ -37,8 +37,8 @@ jobs:
             --fqbn "esp32:esp32:esp32s3:PSRAM=opi,FlashSize=16M,PartitionScheme=huge_app" \
             --output-dir ./build \
             ./esp32_ble_hid_injector > compile.log 2>&1 || true
-          echo "=== last 40 lines ==="
-          tail -40 compile.log
+          echo "=== tail ==="
+          tail -25 compile.log
           ls -lh ./build/ 2>/dev/null
 
       - name: Commit results
@@ -48,6 +48,5 @@ jobs:
           git config user.name "GitHub Actions Bot"
           git add -f compile.log 2>/dev/null || true
           git add -f build/*.bin 2>/dev/null || true
-          git add -f build/*.elf 2>/dev/null || true
           git commit -m "build result (auto)" 2>/dev/null || echo "no change"
           git push 2>/dev/null || echo "push failed"
