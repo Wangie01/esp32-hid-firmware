@@ -46,9 +46,18 @@ void handleTap()   { moveTo(server.arg("x").toInt(), server.arg("y").toInt()); m
 void handleType()  { keyboard.print(server.arg("text")); server.send(200,"application/json","{\"ok\":true}"); }
 void handlePress() {
   String k = server.arg("key");
-  if (k=="home") keyboard.write(KEY_HOME);
-  else if (k=="enter") keyboard.write(KEY_RETURN);
-  else if (k=="escape") keyboard.write(KEY_ESC);
+  if      (k=="home")      keyboard.write(KEY_HOME);
+  else if (k=="enter")     keyboard.write(KEY_RETURN);
+  else if (k=="escape")    keyboard.write(KEY_ESC);
+  else if (k=="tab")       keyboard.write(KEY_TAB);
+  else if (k=="backtab")   { keyboard.press(KEY_LEFT_SHIFT); keyboard.write(KEY_TAB); keyboard.release(KEY_LEFT_SHIFT); }
+  else if (k=="up")        keyboard.write(KEY_UP_ARROW);
+  else if (k=="down")      keyboard.write(KEY_DOWN_ARROW);
+  else if (k=="left")      keyboard.write(KEY_LEFT_ARROW);
+  else if (k=="right")     keyboard.write(KEY_RIGHT_ARROW);
+  else if (k=="space")     keyboard.write(' ');
+  else if (k=="backspace") keyboard.write(KEY_BACKSPACE);
+  else if (k=="delete")    keyboard.write(KEY_DELETE);
   server.send(200,"application/json","{\"ok\":true}");
 }
 
