@@ -4,6 +4,9 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -27,31 +30,24 @@ jobs:
           cd ~/Arduino/libraries
           git clone --depth 1 https://github.com/T-vK/ESP32-BLE-Mouse.git
           git clone --depth 1 https://github.com/T-vK/ESP32-BLE-Keyboard.git
-          ls
 
-      - name: Show board options
-        run: arduino-cli board details -b esp32:esp32:esp32s3 2>&1 | head -40
-
-      - name: Compile
+      - name: Compile (capture log)
         run: |
           set -o pipefail
           arduino-cli compile \
             --fqbn "esp32:esp32:esp32s3:PSRAM=opi,FlashSize=16M,PartitionScheme=huge_app" \
             --output-dir ./build \
-            ./esp32_ble_hid_injector.ino 2>&1 | tee compile.log
-          echo "EXIT=$?"
+            ./esp32_ble_hid_injector.ino > compile.log 2>&1
+          echo "COMPILE_EXIT=$?"
+          tail -80 compile.log
 
-      - name: Upload compile log
+      - name: Commit log + firmware
         if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: compile-log
-          path: compile.log
-
-      - name: Upload firmware
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: esp32-firmware
-          path: ./build/*.bin
-          if-no-files-found: warn
+        run: |
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions Bot"
+          ls -lh ./build/ 2>/dev/null || echo "no build dir"
+          git add -f compile.log 2>/dev/null || true
+          git add -f build/*.bin 2>/dev/null || true
+          git commit -m "build artifacts (auto)" 2>/dev/null || echo "nothing to commit"
+          git push 2>/dev/null || echo "push failed"
