@@ -1,1 +1,69 @@
-Can't open sketch: main file missing from sketch: /home/runner/work/esp32-hid-firmware/esp32-hid-firmware/esp32-hid-firmware.ino
+/home/runner/Arduino/libraries/ESP32-BLE-Mouse/BleMouse.cpp: In static member function 'static void BleMouse::taskServer(void*)':
+/home/runner/Arduino/libraries/ESP32-BLE-Mouse/BleMouse.cpp:143:37: error: cannot convert 'std::string' {aka 'std::__cxx11::basic_string<char>'} to 'String'
+  143 |   BLEDevice::init(bleMouseInstance->deviceName);
+      |                   ~~~~~~~~~~~~~~~~~~^~~~~~~~~~
+      |                                     |
+      |                                     std::string {aka std::__cxx11::basic_string<char>}
+In file included from /home/runner/Arduino/libraries/ESP32-BLE-Mouse/BleMouse.cpp:1:
+/home/runner/.arduino15/packages/esp32/hardware/esp32/3.3.12/libraries/BLE/src/BLEDevice.h:203:27: note:   initializing argument 1 of 'static bool BLEDevice::init(String)'
+  203 |   static bool init(String deviceName = "");
+      |                    ~~~~~~~^~~~~~~~~~~~~~~
+/home/runner/Arduino/libraries/ESP32-BLE-Mouse/BleMouse.cpp:151:50: error: no matching function for call to 'BLECharacteristic::setValue(std::string&)'
+  151 |   bleMouseInstance->hid->manufacturer()->setValue(bleMouseInstance->deviceManufacturer);
+      |   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/runner/.arduino15/packages/esp32/hardware/esp32/3.3.12/libraries/BLE/src/BLEServer.h:50,
+                 from /home/runner/.arduino15/packages/esp32/hardware/esp32/3.3.12/libraries/BLE/src/BLEDevice.h:57:
+/home/runner/.arduino15/packages/esp32/hardware/esp32/3.3.12/libraries/BLE/src/BLECharacteristic.h:214:8: note: candidate: 'void BLECharacteristic::setValue(const uint8_t*, size_t)'
+  214 |   void setValue(const uint8_t *data, size_t size);
+      |        ^~~~~~~~
+/home/runner/.arduino15/packages/esp32/hardware/esp32/3.3.12/libraries/BLE/src/BLECharacteristic.h:214:8: note:   candidate expects 2 arguments, 1 provided
+/home/runner/.arduino15/packages/esp32/hardware/esp32/3.3.12/libraries/BLE/src/BLECharacteristic.h:215:8: note: candidate: 'void BLECharacteristic::setValue(const String&)'
+  215 |   void setValue(const String &value);
+      |        ^~~~~~~~
+/home/runner/.arduino15/packages/esp32/hardware/esp32/3.3.12/libraries/BLE/src/BLECharacteristic.h:215:31: note:   no known conversion for argument 1 from 'std::string' {aka 'std::__cxx11::basic_string<char>'} to 'const String&'
+  215 |   void setValue(const String &value);
+      |                 ~~~~~~~~~~~~~~^~~~~
+/home/runner/.arduino15/packages/esp32/hardware/esp32/3.3.12/libraries/BLE/src/BLECharacteristic.h:216:8: note: candidate: 'void BLECharacteristic::setValue(uint16_t)'
+  216 |   void setValue(uint16_t data16);
+      |        ^~~~~~~~
+/home/runner/.arduino15/packages/esp32/hardware/esp32/3.3.12/libraries/BLE/src/BLECharacteristic.h:216:26: note:   no known conversion for argument 1 from 'std::string' {aka 'std::__cxx11::basic_string<char>'} to 'uint16_t' {aka 'short unsigned int'}
+  216 |   void setValue(uint16_t data16);
+      |                 ~~~~~~~~~^~~~~~
+/home/runner/.arduino15/packages/esp32/hardware/esp32/3.3.12/libraries/BLE/src/BLECharacteristic.h:217:8: note: candidate: 'void BLECharacteristic::setValue(uint32_t)'
+  217 |   void setValue(uint32_t data32);
+      |        ^~~~~~~~
+/home/runner/.arduino15/packages/esp32/hardware/esp32/3.3.12/libraries/BLE/src/BLECharacteristic.h:217:26: note:   no known conversion for argument 1 from 'std::string' {aka 'std::__cxx11::basic_string<char>'} to 'uint32_t' {aka 'long unsigned int'}
+  217 |   void setValue(uint32_t data32);
+      |                 ~~~~~~~~~^~~~~~
+/home/runner/.arduino15/packages/esp32/hardware/esp32/3.3.12/libraries/BLE/src/BLECharacteristic.h:218:8: note: candidate: 'void BLECharacteristic::setValue(int)'
+  218 |   void setValue(int data32);
+      |        ^~~~~~~~
+/home/runner/.arduino15/packages/esp32/hardware/esp32/3.3.12/libraries/BLE/src/BLECharacteristic.h:218:21: note:   no known conversion for argument 1 from 'std::string' {aka 'std::__cxx11::basic_string<char>'} to 'int'
+  218 |   void setValue(int data32);
+      |                 ~~~~^~~~~~
+/home/runner/.arduino15/packages/esp32/hardware/esp32/3.3.12/libraries/BLE/src/BLECharacteristic.h:219:8: note: candidate: 'void BLECharacteristic::setValue(float)'
+  219 |   void setValue(float data32);
+      |        ^~~~~~~~
+/home/runner/.arduino15/packages/esp32/hardware/esp32/3.3.12/libraries/BLE/src/BLECharacteristic.h:219:23: note:   no known conversion for argument 1 from 'std::string' {aka 'std::__cxx11::basic_string<char>'} to 'float'
+  219 |   void setValue(float data32);
+      |                 ~~~~~~^~~~~~
+/home/runner/.arduino15/packages/esp32/hardware/esp32/3.3.12/libraries/BLE/src/BLECharacteristic.h:220:8: note: candidate: 'void BLECharacteristic::setValue(double)'
+  220 |   void setValue(double data64);
+      |        ^~~~~~~~
+/home/runner/.arduino15/packages/esp32/hardware/esp32/3.3.12/libraries/BLE/src/BLECharacteristic.h:220:24: note:   no known conversion for argument 1 from 'std::string' {aka 'std::__cxx11::basic_string<char>'} to 'double'
+  220 |   void setValue(double data64);
+      |                 ~~~~~~~^~~~~~
+
+[92mUsed library[0m       [92mVersion[0m [90mPath[0m
+[93mWiFi[0m               3.3.12  [90m/home/runner/.arduino15/packages/esp32/hardware/esp32/3.3.12/libraries/WiFi[0m
+[93mNetworking[0m         3.3.12  [90m/home/runner/.arduino15/packages/esp32/hardware/esp32/3.3.12/libraries/Network[0m
+[93mWebServer[0m          3.3.12  [90m/home/runner/.arduino15/packages/esp32/hardware/esp32/3.3.12/libraries/WebServer[0m
+[93mFS[0m                 3.3.12  [90m/home/runner/.arduino15/packages/esp32/hardware/esp32/3.3.12/libraries/FS[0m
+[93mESP32 BLE Mouse[0m    0.3.1   [90m/home/runner/Arduino/libraries/ESP32-BLE-Mouse[0m
+[93mBLE[0m                3.3.12  [90m/home/runner/.arduino15/packages/esp32/hardware/esp32/3.3.12/libraries/BLE[0m
+[93mESP32 BLE Keyboard[0m 0.3.2   [90m/home/runner/Arduino/libraries/ESP32-BLE-Keyboard[0m
+[93mHash[0m               3.3.12  [90m/home/runner/.arduino15/packages/esp32/hardware/esp32/3.3.12/libraries/Hash[0m
+
+[92mUsed platform[0m [92mVersion[0m [90mPath[0m
+[93mesp32:esp32[0m   3.3.12  [90m/home/runner/.arduino15/packages/esp32/hardware/esp32/3.3.12[0m
+Error during build: exit status 1
