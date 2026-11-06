@@ -1,0 +1,44 @@
+name: Build ESP32 HID Firmware
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install arduino-cli
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | BINDIR=/usr/local/bin sh
+          arduino-cli version
+
+      - name: Setup ESP32 core
+        run: |
+          arduino-cli config init --overwrite
+          arduino-cli config add board_manager.additional_urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
+          arduino-cli core update-index
+          arduino-cli core install esp32:esp32
+
+      - name: Install BLE HID libraries
+        run: |
+          arduino-cli lib install "ESP32 BLE Mouse"
+          arduino-cli lib install "ESP32 BLE Keyboard"
+          arduino-cli lib list
+
+      - name: Compile for ESP32-S3 N16R8
+        run: |
+          arduino-cli compile \
+            --fqbn "esp32:esp32:esp32s3:PSRAM=opi,FlashSize=16M,PartitionScheme=huge_app,CDCOnBoot=default" \
+            --output-dir ./build \
+            ./esp32_ble_hid_injector.ino 2>&1 | tail -30
+
+      - name: List build output
+        run: ls -lh ./build/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: esp32-firmware
+          path: ./build/*.bin
