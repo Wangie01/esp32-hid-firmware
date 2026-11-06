@@ -24,12 +24,12 @@ jobs:
           arduino-cli core update-index
           arduino-cli core install esp32:esp32@2.0.17
 
-      - name: Install BLE HID libraries
+      - name: Install BLE Combo library
         run: |
           mkdir -p ~/Arduino/libraries
           cd ~/Arduino/libraries
-          git clone --depth 1 https://github.com/T-vK/ESP32-BLE-Mouse.git
-          git clone --depth 1 https://github.com/T-vK/ESP32-BLE-Keyboard.git
+          git clone --depth 1 https://github.com/BlynkGO/ESP32-BLE-Combo.git
+          ls ~/Arduino/libraries
 
       - name: Compile
         run: |
@@ -37,8 +37,7 @@ jobs:
             --fqbn "esp32:esp32:esp32s3:PSRAM=opi,FlashSize=16M,PartitionScheme=huge_app" \
             --output-dir ./build \
             ./esp32_ble_hid_injector > compile.log 2>&1 || true
-          echo "=== tail ==="
-          tail -25 compile.log
+          tail -30 compile.log
           ls -lh ./build/ 2>/dev/null
 
       - name: Commit results
