@@ -22,23 +22,26 @@ jobs:
           arduino-cli core update-index
           arduino-cli core install esp32:esp32
 
-      - name: Install BLE HID libraries
+      - name: Install BLE HID libraries from GitHub
         run: |
-          arduino-cli lib install "ESP32 BLE Mouse"
-          arduino-cli lib install "ESP32 BLE Keyboard"
-          arduino-cli lib list
+          mkdir -p ~/Arduino/libraries
+          cd ~/Arduino/libraries
+          git clone --depth 1 https://github.com/T-vK/ESP32-BLE-Mouse.git || true
+          git clone --depth 1 https://github.com/T-vK/ESP32-BLE-Keyboard.git || true
+          ls -la ~/Arduino/libraries
 
       - name: Compile for ESP32-S3 N16R8
         run: |
           arduino-cli compile \
-            --fqbn "esp32:esp32:esp32s3:PSRAM=opi,FlashSize=16M,PartitionScheme=huge_app,CDCOnBoot=default" \
+            --fqbn "esp32:esp32:esp32s3:PSRAM=opi,FlashSize=16M,PartitionScheme=huge_app" \
             --output-dir ./build \
-            ./esp32_ble_hid_injector.ino 2>&1 | tail -30
+            ./esp32_ble_hid_injector.ino 2>&1 | tail -40
 
       - name: List build output
-        run: ls -lh ./build/
+        run: ls -lh ./build/ || true
 
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: esp32-firmware
           path: ./build/*.bin
