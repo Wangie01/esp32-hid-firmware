@@ -13,7 +13,6 @@ jobs:
       - name: Install arduino-cli
         run: |
           curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | BINDIR=/usr/local/bin sh
-          arduino-cli version
 
       - name: Setup ESP32 core
         run: |
@@ -22,26 +21,37 @@ jobs:
           arduino-cli core update-index
           arduino-cli core install esp32:esp32
 
-      - name: Install BLE HID libraries from GitHub
+      - name: Install BLE HID libraries
         run: |
           mkdir -p ~/Arduino/libraries
           cd ~/Arduino/libraries
-          git clone --depth 1 https://github.com/T-vK/ESP32-BLE-Mouse.git || true
-          git clone --depth 1 https://github.com/T-vK/ESP32-BLE-Keyboard.git || true
-          ls -la ~/Arduino/libraries
+          git clone --depth 1 https://github.com/T-vK/ESP32-BLE-Mouse.git
+          git clone --depth 1 https://github.com/T-vK/ESP32-BLE-Keyboard.git
+          ls
 
-      - name: Compile for ESP32-S3 N16R8
+      - name: Show board options
+        run: arduino-cli board details -b esp32:esp32:esp32s3 2>&1 | head -40
+
+      - name: Compile
         run: |
+          set -o pipefail
           arduino-cli compile \
             --fqbn "esp32:esp32:esp32s3:PSRAM=opi,FlashSize=16M,PartitionScheme=huge_app" \
             --output-dir ./build \
-            ./esp32_ble_hid_injector.ino 2>&1 | tail -40
+            ./esp32_ble_hid_injector.ino 2>&1 | tee compile.log
+          echo "EXIT=$?"
 
-      - name: List build output
-        run: ls -lh ./build/ || true
-
-      - uses: actions/upload-artifact@v4
+      - name: Upload compile log
         if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: compile-log
+          path: compile.log
+
+      - name: Upload firmware
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: esp32-firmware
           path: ./build/*.bin
+          if-no-files-found: warn
