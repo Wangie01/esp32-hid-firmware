@@ -7,7 +7,7 @@
 #include <BleCombo.h>
 
 const char* WIFI_SSID = "ChinaUnicom-1003";
-const char* WIFI_PASS = "WIFI_PASSWORD_HERE";
+const char* WIFI_PASS = "15821378708";
 float PX_PER_UNIT_X = 1.0f;
 float PX_PER_UNIT_Y = 1.0f;
 const int MAX_STEP = 40;
