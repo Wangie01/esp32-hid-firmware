@@ -31,23 +31,23 @@ jobs:
           git clone --depth 1 https://github.com/T-vK/ESP32-BLE-Mouse.git
           git clone --depth 1 https://github.com/T-vK/ESP32-BLE-Keyboard.git
 
-      - name: Compile (capture log)
+      - name: Compile
         run: |
-          set -o pipefail
           arduino-cli compile \
             --fqbn "esp32:esp32:esp32s3:PSRAM=opi,FlashSize=16M,PartitionScheme=huge_app" \
             --output-dir ./build \
-            ./esp32_ble_hid_injector.ino > compile.log 2>&1
-          echo "COMPILE_EXIT=$?"
-          tail -80 compile.log
+            ./esp32_ble_hid_injector > compile.log 2>&1 || true
+          echo "=== last 40 lines ==="
+          tail -40 compile.log
+          ls -lh ./build/ 2>/dev/null
 
-      - name: Commit log + firmware
+      - name: Commit results
         if: always()
         run: |
           git config user.email "actions@github.com"
           git config user.name "GitHub Actions Bot"
-          ls -lh ./build/ 2>/dev/null || echo "no build dir"
           git add -f compile.log 2>/dev/null || true
           git add -f build/*.bin 2>/dev/null || true
-          git commit -m "build artifacts (auto)" 2>/dev/null || echo "nothing to commit"
+          git add -f build/*.elf 2>/dev/null || true
+          git commit -m "build result (auto)" 2>/dev/null || echo "no change"
           git push 2>/dev/null || echo "push failed"
